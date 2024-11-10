@@ -988,6 +988,11 @@ void SystemView::renderCarousel(const Transform4x4f& trans)
         opacity = Math::max((int) 0x80, opacity);
 
         const std::shared_ptr<GuiComponent> &comp = mEntries.at(index).data.logo;
+		if (mCarousel.type == VERTICAL_WHEEL || mCarousel.type == HORIZONTAL_WHEEL) {
+			comp->setRotationDegrees(mCarousel.logoRotation * distance);
+			comp->setRotationOrigin(mCarousel.logoRotationOrigin);
+		}
+		
         if (comp->isKindOf<TextComponent>())
         {
             TextComponent* text = (TextComponent*)comp.get();
