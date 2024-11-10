@@ -224,7 +224,17 @@ void SystemView::populate()
 				0x000000FF,
 				ALIGN_CENTER);
 			text->setSize(mCarousel.logoSize * mCarousel.logoScale);
+
+			// Store original color before applying theme
+    		e.data.originalTextColor = 0x000000FF;
+
 			text->applyTheme((*it)->getTheme(), "system", "logoText", ThemeFlags::FONT_PATH | ThemeFlags::FONT_SIZE | ThemeFlags::COLOR | ThemeFlags::FORCE_UPPERCASE | ThemeFlags::LINE_SPACING | ThemeFlags::TEXT);
+			
+			// Update stored color if it was changed by theme
+			if (auto elem = (*it)->getTheme()->getElement("system", "logoText", "text"))
+				if (elem->has("color"))
+					e.data.originalTextColor = elem->get<unsigned int>("color");
+
 			e.data.logo = std::shared_ptr<GuiComponent>(text);
 
 			if (mCarousel.type == VERTICAL || mCarousel.type == VERTICAL_WHEEL)
@@ -992,7 +1002,7 @@ void SystemView::renderCarousel(const Transform4x4f& trans)
 			comp->setRotationDegrees(mCarousel.logoRotation * distance);
 			comp->setRotationOrigin(mCarousel.logoRotationOrigin);
 		}
-		
+
         if (comp->isKindOf<TextComponent>())
         {
             TextComponent* text = (TextComponent*)comp.get();
@@ -1001,7 +1011,7 @@ void SystemView::renderCarousel(const Transform4x4f& trans)
             if (index == mCursor && mCarousel.selectedColor)
                 color = (mCarousel.selectedColor & 0xFFFFFF00) | (unsigned char)opacity;
             else
-                color = (text->getColor() & 0xFFFFFF00) | (unsigned char)opacity;
+                color = (mEntries.at(index).data.originalTextColor & 0xFFFFFF00) | (unsigned char)opacity;
             
             text->setColor(color);
         }
