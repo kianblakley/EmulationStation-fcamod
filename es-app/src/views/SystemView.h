@@ -48,6 +48,7 @@ struct SystemViewCarousel
 
 	std::string		defaultTransition;
 	std::string		scrollSound;
+	unsigned int selectedColor; 
 };
 
 class SystemView : public IList<SystemViewData, SystemData*>
