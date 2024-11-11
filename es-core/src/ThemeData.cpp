@@ -233,8 +233,9 @@ std::map<std::string, std::map<std::string, ThemeData::ElementPropertyType>> The
 		{ "systemInfoDelay", FLOAT },	
 		{ "defaultTransition", STRING },
 		{ "scrollSound", PATH },
+		{ "zIndex", FLOAT },
 		{ "selectedColor", COLOR },
-		{ "zIndex", FLOAT } } },
+		{ "opacityEffect", BOOLEAN } } },
 	{ "menuText", {
 		{ "fontPath", PATH },
 		{ "fontSize", FLOAT },

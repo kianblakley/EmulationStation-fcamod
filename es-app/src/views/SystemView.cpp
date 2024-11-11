@@ -36,6 +36,7 @@ SystemView::SystemView(Window* window) : IList<SystemViewData, SystemData*>(wind
 	mStaticVideoBackground = nullptr;
 	mExtrasFadeOldCursor = -1;
 	mCarousel.selectedColor = 0;
+	mCarousel.opacityEffect = true;
 
 	setSize((float)Renderer::getScreenWidth(), (float)Renderer::getScreenHeight());
 	populate();
@@ -994,8 +995,12 @@ void SystemView::renderCarousel(const Transform4x4f& trans)
         scale = Math::min(mCarousel.logoScale, Math::max(1.0f, scale));
         scale /= mCarousel.logoScale;
 
-        int opacity = (int)Math::round(0x80 + ((0xFF - 0x80) * (1.0f - fabs(distance))));
-        opacity = Math::max((int) 0x80, opacity);
+        int opacity = mCarousel.opacityEffect ? 
+            (int)Math::round(0x80 + ((0xFF - 0x80) * (1.0f - fabs(distance)))) : 
+            0xFF;
+            
+        if(mCarousel.opacityEffect)
+            opacity = Math::max((int) 0x80, opacity);
 
         const std::shared_ptr<GuiComponent> &comp = mEntries.at(index).data.logo;
 		if (mCarousel.type == VERTICAL_WHEEL || mCarousel.type == HORIZONTAL_WHEEL) {
@@ -1361,8 +1366,11 @@ void SystemView::getCarouselFromTheme(const ThemeData::ThemeElement* elem)
 
 	if (elem->has("defaultTransition"))
 		mCarousel.defaultTransition = elem->get<std::string>("defaultTransition");
+
 	if (elem->has("selectedColor"))
         mCarousel.selectedColor = elem->get<unsigned int>("selectedColor");
+	if (elem->has("opacityEffect"))
+        mCarousel.opacityEffect = elem->get<bool>("opacityEffect");
 }
 
 void SystemView::onShow()
