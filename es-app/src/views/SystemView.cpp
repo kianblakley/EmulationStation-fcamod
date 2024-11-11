@@ -995,10 +995,12 @@ void SystemView::renderCarousel(const Transform4x4f& trans)
         scale = Math::min(mCarousel.logoScale, Math::max(1.0f, scale));
         scale /= mCarousel.logoScale;
 
+		// If opacityEffect is true, calculate opacity. Otherwise set to opacity to opaque
         int opacity = mCarousel.opacityEffect ? 
             (int)Math::round(0x80 + ((0xFF - 0x80) * (1.0f - fabs(distance)))) : 
             0xFF;
-            
+		
+		// ensure opacity never goes below 50%
         if(mCarousel.opacityEffect)
             opacity = Math::max((int) 0x80, opacity);
 
