@@ -25,6 +25,7 @@ struct SystemViewData
 {	
 	std::shared_ptr<GuiComponent> logo;
 	std::vector<GuiComponent*> backgroundExtras;
+	unsigned int originalTextColor; 
 };
 
 struct SystemViewCarousel
@@ -49,7 +50,7 @@ struct SystemViewCarousel
 	std::string		defaultTransition;
 	std::string		scrollSound;
 	unsigned int selectedColor; 
-	unsigned int originalTextColor; 
+	
 };
 
 class SystemView : public IList<SystemViewData, SystemData*>
