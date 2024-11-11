@@ -235,7 +235,8 @@ std::map<std::string, std::map<std::string, ThemeData::ElementPropertyType>> The
 		{ "scrollSound", PATH },
 		{ "zIndex", FLOAT },
 		{ "selectedColor", COLOR },
-		{ "opacityEffect", BOOLEAN } } },
+		{ "opacityEffect", BOOLEAN },
+		{ "selectorImagePath", PATH } } },
 	{ "menuText", {
 		{ "fontPath", PATH },
 		{ "fontSize", FLOAT },

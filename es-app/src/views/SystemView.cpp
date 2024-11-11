@@ -37,6 +37,8 @@ SystemView::SystemView(Window* window) : IList<SystemViewData, SystemData*>(wind
 	mExtrasFadeOldCursor = -1;
 	mCarousel.selectedColor = 0;
 	mCarousel.opacityEffect = true;
+	mCarousel.selectorImage = ImageComponent(window);
+    mCarousel.hasSelectorImage = false;
 
 	setSize((float)Renderer::getScreenWidth(), (float)Renderer::getScreenHeight());
 	populate();
@@ -995,6 +997,26 @@ void SystemView::renderCarousel(const Transform4x4f& trans)
         scale = Math::min(mCarousel.logoScale, Math::max(1.0f, scale));
         scale /= mCarousel.logoScale;
 
+		// Selector image
+		if (mCarousel.hasSelectorImage) {
+			float xOff = 0;
+			float yOff = 0;
+			
+			// Calculate position based on carousel type
+			if (mCarousel.type == HORIZONTAL || mCarousel.type == HORIZONTAL_WHEEL)
+			{
+				xOff = mCamOffset * logoSpacing[0];
+			}
+			else
+			{
+				yOff = mCamOffset * logoSpacing[1];
+			}
+
+			Transform4x4f selectorTrans = carouselTrans;
+			selectorTrans.translate(Vector3f(xOff, yOff, 0));
+			mCarousel.selectorImage.render(selectorTrans);
+    	}
+
 		// If opacityEffect is true, calculate opacity. Otherwise set to opacity to opaque
         int opacity = mCarousel.opacityEffect ? 
             (int)Math::round(0x80 + ((0xFF - 0x80) * (1.0f - fabs(distance)))) : 
@@ -1373,6 +1395,16 @@ void SystemView::getCarouselFromTheme(const ThemeData::ThemeElement* elem)
         mCarousel.selectedColor = elem->get<unsigned int>("selectedColor");
 	if (elem->has("opacityEffect"))
         mCarousel.opacityEffect = elem->get<bool>("opacityEffect");
+	if (elem->has("selectorImagePath"))
+    {
+        const std::string& path = elem->get<std::string>("selectorImagePath");
+        mCarousel.selectorImage.setImage(path);
+        mCarousel.hasSelectorImage = true;
+        
+        // Set size based on logo size
+        mCarousel.selectorImage.setSize(mCarousel.logoSize.x() * mCarousel.logoScale, 
+                                      mCarousel.logoSize.y() * mCarousel.logoScale);
+    }
 }
 
 void SystemView::onShow()

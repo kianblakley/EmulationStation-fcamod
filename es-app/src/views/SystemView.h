@@ -51,6 +51,8 @@ struct SystemViewCarousel
 	std::string		scrollSound;
 	unsigned int selectedColor; 
 	bool opacityEffect;
+	ImageComponent selectorImage;     
+    bool          hasSelectorImage;   
 	
 };
 
