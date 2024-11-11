@@ -39,7 +39,8 @@ SystemView::SystemView(Window* window) : IList<SystemViewData, SystemData*>(wind
 	mCarousel.opacityEffect = true;
 	mCarousel.selectorImage = new ImageComponent(window, false, false);
     mCarousel.hasSelectorImage = false;
-    mCarousel.selectedColor = 0;
+	mCarousel.selectorOffsetX = 0;
+    mCarousel.selectorOffsetY = 0;
 
 	setSize((float)Renderer::getScreenWidth(), (float)Renderer::getScreenHeight());
 	populate();
@@ -989,23 +990,26 @@ void SystemView::renderCarousel(const Transform4x4f& trans)
 
 	// selector image
 	if (mCarousel.hasSelectorImage)
-    {
-        float xOff = 0;
-        float yOff = 0;
-        
-        if (mCarousel.type == HORIZONTAL || mCarousel.type == HORIZONTAL_WHEEL)
-        {
-            xOff = mCamOffset * logoSpacing[0];
-        }
-        else
-        {
-            yOff = mCamOffset * logoSpacing[1];
-        }
+	{
+		float xOff = 0;
+		float yOff = 0;
+		
+		if (mCarousel.type == HORIZONTAL || mCarousel.type == HORIZONTAL_WHEEL)
+		{
+			xOff = mCamOffset * logoSpacing[0];
+			yOff = (mCarousel.size.y() - mCarousel.logoSize.y()) / 2.0f + mCarousel.selectorOffsetY;
+		}
+		else
+		{
+			// For vertical carousel, position selector in the middle with offsets
+			xOff = mCarousel.selectorOffsetX;
+			yOff = (mCarousel.size.y() - mCarousel.logoSize.y()) / 2.0f + mCarousel.selectorOffsetY;
+		}
 
-        Transform4x4f selectorTrans = carouselTrans;
-        selectorTrans.translate(Vector3f(xOff, yOff, 0));
-        mCarousel.selectorImage->render(selectorTrans);
-    }
+		Transform4x4f selectorTrans = carouselTrans;
+		selectorTrans.translate(Vector3f(xOff, yOff, 0));
+		mCarousel.selectorImage->render(selectorTrans);
+	}
 
     for (int i = center - logoCount / 2 + bufferLeft; i <= center + logoCount / 2 + bufferRight; i++)
     {
@@ -1410,6 +1414,10 @@ void SystemView::getCarouselFromTheme(const ThemeData::ThemeElement* elem)
                                        mCarousel.logoSize.y() * mCarousel.logoScale);
         mCarousel.hasSelectorImage = true;
     }
+	 if (elem->has("selectorOffsetX"))
+        mCarousel.selectorOffsetX = elem->get<float>("selectorOffsetX") * Renderer::getScreenWidth();
+    if (elem->has("selectorOffsetY"))
+        mCarousel.selectorOffsetY = elem->get<float>("selectorOffsetY") * Renderer::getScreenHeight();
 }
 
 void SystemView::onShow()

@@ -236,7 +236,9 @@ std::map<std::string, std::map<std::string, ThemeData::ElementPropertyType>> The
 		{ "zIndex", FLOAT },
 		{ "selectedColor", COLOR },
 		{ "opacityEffect", BOOLEAN },
-		{ "selectorImagePath", PATH } } },
+		{ "selectorImagePath", PATH },
+		{ "selectorOffsetX", FLOAT },
+		{ "selectorOffsetY", FLOAT } } },
 	{ "menuText", {
 		{ "fontPath", PATH },
 		{ "fontSize", FLOAT },
