@@ -35,7 +35,8 @@ SystemView::SystemView(Window* window) : IList<SystemViewData, SystemData*>(wind
 	mStaticBackground = nullptr;
 	mStaticVideoBackground = nullptr;
 	mExtrasFadeOldCursor = -1;
-	
+	mCarousel.selectedColor = 0;
+
 	setSize((float)Renderer::getScreenWidth(), (float)Renderer::getScreenHeight());
 	populate();
 }
@@ -223,7 +224,17 @@ void SystemView::populate()
 				0x000000FF,
 				ALIGN_CENTER);
 			text->setSize(mCarousel.logoSize * mCarousel.logoScale);
+
+			// Store original color before applying theme
+    		e.data.originalTextColor = 0x000000FF;
+
 			text->applyTheme((*it)->getTheme(), "system", "logoText", ThemeFlags::FONT_PATH | ThemeFlags::FONT_SIZE | ThemeFlags::COLOR | ThemeFlags::FORCE_UPPERCASE | ThemeFlags::LINE_SPACING | ThemeFlags::TEXT);
+			
+			// Update stored color if it was changed by theme
+			if (auto elem = (*it)->getTheme()->getElement("system", "logoText", "text"))
+				if (elem->has("color"))
+					e.data.originalTextColor = elem->get<unsigned int>("color");
+
 			e.data.logo = std::shared_ptr<GuiComponent>(text);
 
 			if (mCarousel.type == VERTICAL || mCarousel.type == VERTICAL_WHEEL)
@@ -966,35 +977,49 @@ void SystemView::renderCarousel(const Transform4x4f& trans)
 		bufferRight = 0;
 	}
 
-	for (int i = center - logoCount / 2 + bufferLeft; i <= center + logoCount / 2 + bufferRight; i++)
-	{
-		int index = i;
-		while (index < 0)
-			index += (int)mEntries.size();
-		while (index >= (int)mEntries.size())
-			index -= (int)mEntries.size();
+    for (int i = center - logoCount / 2 + bufferLeft; i <= center + logoCount / 2 + bufferRight; i++)
+    {
+        int index = i;
+        while (index < 0)
+            index += (int)mEntries.size();
+        while (index >= (int)mEntries.size())
+            index -= (int)mEntries.size();
 
-		Transform4x4f logoTrans = carouselTrans;
-		logoTrans.translate(Vector3f(i * logoSpacing[0] + xOff, i * logoSpacing[1] + yOff, 0));
+        Transform4x4f logoTrans = carouselTrans;
+        logoTrans.translate(Vector3f(i * logoSpacing[0] + xOff, i * logoSpacing[1] + yOff, 0));
 
-		float distance = i - mCamOffset;
+        float distance = i - mCamOffset;
 
-		float scale = 1.0f + ((mCarousel.logoScale - 1.0f) * (1.0f - fabs(distance)));
-		scale = Math::min(mCarousel.logoScale, Math::max(1.0f, scale));
-		scale /= mCarousel.logoScale;
+        float scale = 1.0f + ((mCarousel.logoScale - 1.0f) * (1.0f - fabs(distance)));
+        scale = Math::min(mCarousel.logoScale, Math::max(1.0f, scale));
+        scale /= mCarousel.logoScale;
 
-		int opacity = (int)Math::round(0x80 + ((0xFF - 0x80) * (1.0f - fabs(distance))));
-		opacity = Math::max((int) 0x80, opacity);
+        int opacity = (int)Math::round(0x80 + ((0xFF - 0x80) * (1.0f - fabs(distance))));
+        opacity = Math::max((int) 0x80, opacity);
 
-		const std::shared_ptr<GuiComponent> &comp = mEntries.at(index).data.logo;
+        const std::shared_ptr<GuiComponent> &comp = mEntries.at(index).data.logo;
 		if (mCarousel.type == VERTICAL_WHEEL || mCarousel.type == HORIZONTAL_WHEEL) {
 			comp->setRotationDegrees(mCarousel.logoRotation * distance);
 			comp->setRotationOrigin(mCarousel.logoRotationOrigin);
 		}
-		comp->setScale(scale);
-		comp->setOpacity((unsigned char)opacity);
-		comp->render(logoTrans);
-	}
+
+        if (comp->isKindOf<TextComponent>())
+        {
+            TextComponent* text = (TextComponent*)comp.get();
+            
+            unsigned int color;
+            if (index == mCursor && mCarousel.selectedColor)
+                color = (mCarousel.selectedColor & 0xFFFFFF00) | (unsigned char)opacity;
+            else
+                color = (mEntries.at(index).data.originalTextColor & 0xFFFFFF00) | (unsigned char)opacity;
+            
+            text->setColor(color);
+        }
+
+        comp->setScale(scale);
+        comp->setOpacity((unsigned char)opacity);
+        comp->render(logoTrans);
+    }
 	Renderer::popClipRect();
 }
 
@@ -1336,6 +1361,8 @@ void SystemView::getCarouselFromTheme(const ThemeData::ThemeElement* elem)
 
 	if (elem->has("defaultTransition"))
 		mCarousel.defaultTransition = elem->get<std::string>("defaultTransition");
+	if (elem->has("selectedColor"))
+        mCarousel.selectedColor = elem->get<unsigned int>("selectedColor");
 }
 
 void SystemView::onShow()

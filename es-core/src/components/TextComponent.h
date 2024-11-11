@@ -49,9 +49,10 @@ public:
 	void setPadding(const Vector4f padding) { mPadding = padding; }
 
 	virtual void update(int deltaTime);
-
+	inline unsigned int getColor() const { return mColor; }
 	bool getAutoScroll() { return mAutoScroll; }
 	void setAutoScroll(bool value);
+	
 
 protected:
 	virtual void onTextChanged();

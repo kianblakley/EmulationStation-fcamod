@@ -177,20 +177,6 @@ std::map<std::string, std::map<std::string, ThemeData::ElementPropertyType>> The
 		{ "hotkeyColor", COLOR },
 		{ "visible", BOOLEAN },
 		{ "zIndex", FLOAT } } },
-	{ "batteryIndicator", {
-		{ "pos", NORMALIZED_PAIR },
-		{ "size", NORMALIZED_PAIR },		
-		{ "itemSpacing", FLOAT },
-		{ "horizontalAlignment", STRING },
-		{ "incharge", PATH },
-		{ "full", PATH },
-		{ "at75", PATH },
-		{ "at50", PATH },
-		{ "at25", PATH },
-		{ "empty", PATH },
-		{ "color", COLOR },
-		{ "visible", BOOLEAN },
-		{ "zIndex", FLOAT } } },
 	{ "helpsystem", {
 		{ "pos", NORMALIZED_PAIR },
 		{ "origin", NORMALIZED_PAIR },
@@ -247,6 +233,7 @@ std::map<std::string, std::map<std::string, ThemeData::ElementPropertyType>> The
 		{ "systemInfoDelay", FLOAT },	
 		{ "defaultTransition", STRING },
 		{ "scrollSound", PATH },
+		{ "selectedColor", COLOR },
 		{ "zIndex", FLOAT } } },
 	{ "menuText", {
 		{ "fontPath", PATH },
