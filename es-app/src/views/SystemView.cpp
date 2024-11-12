@@ -41,6 +41,7 @@ SystemView::SystemView(Window* window) : IList<SystemViewData, SystemData*>(wind
     mCarousel.hasSelectorImage = false;
 	mCarousel.selectorOffsetX = 0;
     mCarousel.selectorOffsetY = 0;
+	mCarousel.selectorAutoSize = false;
 
 	setSize((float)Renderer::getScreenWidth(), (float)Renderer::getScreenHeight());
 	populate();
@@ -988,6 +989,17 @@ void SystemView::renderCarousel(const Transform4x4f& trans)
 		bufferRight = 0;
 	}
 
+	// Only adjust size if auto size is enabled
+    if (mCarousel.selectorAutoSize && mEntries.at(mCursor).data.logo->isKindOf<TextComponent>())
+    {
+        TextComponent* text = (TextComponent*)mEntries.at(mCursor).data.logo.get();
+        Vector2f textSize = text->getFont()->sizeText(text->getText());
+        
+        // Update selector size to match text
+        mCarousel.selectorImage->setSize(textSize.x() + 20, // Add some padding
+                                       mCarousel.logoSize.y() * mCarousel.logoScale);
+    }
+	
 	// selector image
 	if (mCarousel.hasSelectorImage)
 	{
@@ -996,8 +1008,8 @@ void SystemView::renderCarousel(const Transform4x4f& trans)
 		
 		if (mCarousel.type == HORIZONTAL || mCarousel.type == HORIZONTAL_WHEEL)
 		{
-			xOff = mCamOffset * logoSpacing[0];
-			yOff = (mCarousel.size.y() - mCarousel.logoSize.y()) / 2.0f + mCarousel.selectorOffsetY;
+			xOff = (mCamOffset * logoSpacing[0]) + mCarousel.selectorOffsetX;  
+			yOff = mCarousel.selectorOffsetY;
 		}
 		else
 		{
@@ -1418,6 +1430,8 @@ void SystemView::getCarouselFromTheme(const ThemeData::ThemeElement* elem)
         mCarousel.selectorOffsetX = elem->get<float>("selectorOffsetX") * Renderer::getScreenWidth();
     if (elem->has("selectorOffsetY"))
         mCarousel.selectorOffsetY = elem->get<float>("selectorOffsetY") * Renderer::getScreenHeight();
+	if (elem->has("selectorAutoSize"))
+        mCarousel.selectorAutoSize = elem->get<bool>("selectorAutoSize");
 }
 
 void SystemView::onShow()

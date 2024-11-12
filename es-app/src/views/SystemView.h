@@ -56,6 +56,7 @@ struct SystemViewCarousel
     bool hasSelectorImage;  
 	float selectorOffsetX;    
     float selectorOffsetY;
+	bool selectorAutoSize;
 	
 };
 

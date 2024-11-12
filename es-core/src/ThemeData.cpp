@@ -238,7 +238,8 @@ std::map<std::string, std::map<std::string, ThemeData::ElementPropertyType>> The
 		{ "opacityEffect", BOOLEAN },
 		{ "selectorImagePath", PATH },
 		{ "selectorOffsetX", FLOAT },
-		{ "selectorOffsetY", FLOAT } } },
+		{ "selectorOffsetY", FLOAT },
+		{ "selectorAutoSize", BOOLEAN } } },
 	{ "menuText", {
 		{ "fontPath", PATH },
 		{ "fontSize", FLOAT },
