@@ -37,7 +37,7 @@ SystemView::SystemView(Window* window) : IList<SystemViewData, SystemData*>(wind
 	mExtrasFadeOldCursor = -1;
 	mCarousel.selectedColor = 0;
 	mCarousel.opacityEffect = true;
-	mCarousel.selectorImage = new ImageComponent(window, false, false);
+	mCarousel.selectorImage = new NinePatchComponent(window);
     mCarousel.hasSelectorImage = false;
 	mCarousel.selectorOffsetX = 0;
     mCarousel.selectorOffsetY = 0;

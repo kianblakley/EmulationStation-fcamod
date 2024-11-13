@@ -52,7 +52,7 @@ struct SystemViewCarousel
 
 	unsigned int selectedColor; 
 	bool opacityEffect;
-    ImageComponent* selectorImage;
+    NinePatchComponent* selectorImage;
     bool hasSelectorImage;  
 	float selectorOffsetX;    
     float selectorOffsetY;
