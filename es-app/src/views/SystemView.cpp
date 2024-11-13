@@ -1421,7 +1421,7 @@ void SystemView::getCarouselFromTheme(const ThemeData::ThemeElement* elem)
 	if (elem->has("selectorImagePath"))
     {
         const std::string& path = elem->get<std::string>("selectorImagePath");
-        mCarousel.selectorImage->setImage(path);
+        mCarousel.selectorImage->setImagePath(path);
         mCarousel.selectorImage->setSize(mCarousel.logoSize.x() * mCarousel.logoScale, 
                                        mCarousel.logoSize.y() * mCarousel.logoScale);
         mCarousel.hasSelectorImage = true;
