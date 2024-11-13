@@ -133,7 +133,8 @@ std::map<std::string, std::map<std::string, ThemeData::ElementPropertyType>> The
 		{ "edgeColor", COLOR },
 		{ "animateColor", COLOR },
 		{ "animateColorTime", FLOAT },
-		{ "zIndex", FLOAT } } },
+		{ "zIndex", FLOAT },
+		{ "selectorCornerSize", NORMALIZED_PAIR } } },
 	{ "datetime", {
 		{ "pos", NORMALIZED_PAIR },
 		{ "size", NORMALIZED_PAIR },

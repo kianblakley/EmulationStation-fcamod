@@ -1425,13 +1425,18 @@ void SystemView::getCarouselFromTheme(const ThemeData::ThemeElement* elem)
         mCarousel.selectorImage->setSize(mCarousel.logoSize.x() * mCarousel.logoScale, 
                                        mCarousel.logoSize.y() * mCarousel.logoScale);
         mCarousel.hasSelectorImage = true;
-    }
-	 if (elem->has("selectorOffsetX"))
+    }   
+	if (elem->has("selectorOffsetX"))
         mCarousel.selectorOffsetX = elem->get<float>("selectorOffsetX") * Renderer::getScreenWidth();
     if (elem->has("selectorOffsetY"))
         mCarousel.selectorOffsetY = elem->get<float>("selectorOffsetY") * Renderer::getScreenHeight();
 	if (elem->has("selectorAutoSize"))
         mCarousel.selectorAutoSize = elem->get<bool>("selectorAutoSize");
+	if (elem->has("selectorCornerSize"))
+	{
+		Vector2f cornerSize = elem->get<Vector2f>("selectorCornerSize");
+		mCarousel.selectorImage->setCornerSize(cornerSize.x(), cornerSize.y());
+	}
 }
 
 void SystemView::onShow()
