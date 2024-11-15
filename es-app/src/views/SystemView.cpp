@@ -43,6 +43,8 @@ SystemView::SystemView(Window* window) : IList<SystemViewData, SystemData*>(wind
     mCarousel.selectorOffsetY = 0;
 	mCarousel.selectorAutoSize = false;
 	mCarousel.textCase = "";
+	mCarousel.selectorPaddingX = 0;
+    mCarousel.selectorPaddingY = 0;
 
 	setSize((float)Renderer::getScreenWidth(), (float)Renderer::getScreenHeight());
 	populate();
@@ -1018,8 +1020,10 @@ void SystemView::renderCarousel(const Transform4x4f& trans)
         TextComponent* text = (TextComponent*)mEntries.at(mCursor).data.logo.get();
         Vector2f textSize = text->getFont()->sizeText(text->getText());
         
-        // Update selector size to match text
-        mCarousel.selectorImage->setSize(textSize.x(), mCarousel.logoSize.y() * mCarousel.logoScale);
+		mCarousel.selectorImage->setSize(
+			textSize.x() + (mCarousel.selectorPaddingX * 2), // Horizontal padding on both sides
+			mCarousel.logoSize.y() * mCarousel.logoScale + (mCarousel.selectorPaddingY * 2)  // Vertical padding on top/bottom
+		);
     }
 	
 	// selector image
@@ -1463,6 +1467,10 @@ void SystemView::getCarouselFromTheme(const ThemeData::ThemeElement* elem)
     {
         mCarousel.textCase = elem->get<std::string>("textCase");
     }
+	if (elem->has("selectorPaddingX"))
+        mCarousel.selectorPaddingX = (int)elem->get<float>("selectorPaddingX");
+    if (elem->has("selectorPaddingY"))
+        mCarousel.selectorPaddingY = (int)elem->get<float>("selectorPaddingY");
 }
 
 void SystemView::onShow()

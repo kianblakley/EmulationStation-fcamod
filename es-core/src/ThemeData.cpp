@@ -241,7 +241,9 @@ std::map<std::string, std::map<std::string, ThemeData::ElementPropertyType>> The
 		{ "selectorOffsetX", FLOAT },
 		{ "selectorOffsetY", FLOAT },
 		{ "selectorAutoSize", BOOLEAN },
-		{ "textCase", STRING } } },
+		{ "textCase", STRING },
+		{ "selectorPaddingX", FLOAT },
+    	{ "selectorPaddingY", FLOAT } } },
 	{ "menuText", {
 		{ "fontPath", PATH },
 		{ "fontSize", FLOAT },
