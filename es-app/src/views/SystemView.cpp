@@ -42,7 +42,7 @@ SystemView::SystemView(Window* window) : IList<SystemViewData, SystemData*>(wind
 	mCarousel.selectorOffsetX = 0;
     mCarousel.selectorOffsetY = 0;
 	mCarousel.selectorAutoSize = false;
-	mCarousel.textCase = ""
+	mCarousel.textCase = "";
 
 	setSize((float)Renderer::getScreenWidth(), (float)Renderer::getScreenHeight());
 	populate();
