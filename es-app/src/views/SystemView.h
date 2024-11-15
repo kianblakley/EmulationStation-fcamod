@@ -57,6 +57,7 @@ struct SystemViewCarousel
 	float selectorOffsetX;    
     float selectorOffsetY;
 	bool selectorAutoSize;
+	std::string textCase;
 	
 };
 

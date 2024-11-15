@@ -42,6 +42,7 @@ SystemView::SystemView(Window* window) : IList<SystemViewData, SystemData*>(wind
 	mCarousel.selectorOffsetX = 0;
     mCarousel.selectorOffsetY = 0;
 	mCarousel.selectorAutoSize = false;
+	mCarousel.textCase = ""
 
 	setSize((float)Renderer::getScreenWidth(), (float)Renderer::getScreenHeight());
 	populate();
@@ -229,13 +230,35 @@ void SystemView::populate()
 
 		if (!e.data.logo)
 		{
-			// no logo in theme; use text, capitalize first letter
+			// Get the system name before any case modifications
+			std::string displayName = (*it)->getFullName();
+
+			// Apply text case formatting based on carousel setting
+			if (mCarousel.textCase == "uppercase")
+			{
+				displayName = Utils::String::toUpper(displayName);
+			}
+			else if (mCarousel.textCase == "lowercase")
+			{
+				displayName = Utils::String::toLower(displayName);
+			}
+			else if (mCarousel.textCase == "capitalize")
+			{
+				if (!displayName.empty())
+				{
+					displayName[0] = toupper(displayName[0]);
+					for (size_t i = 1; i < displayName.length(); i++)
+						displayName[i] = tolower(displayName[i]);
+				}
+			}
+			// no logo in theme; use text
 			TextComponent* text = new TextComponent(mWindow,
-				[](const std::string& str) { std::string s = str; if (!s.empty()) s[0] = toupper(s[0]); return s; }((*it)->getFullName()),
+				displayName,
 				Font::get(FONT_SIZE_LARGE),
 				0x000000FF,
 				ALIGN_CENTER);
 			text->setSize(mCarousel.logoSize * mCarousel.logoScale);
+
 
 			// Store original color before applying theme
     		e.data.originalTextColor = 0x000000FF;
@@ -996,8 +1019,7 @@ void SystemView::renderCarousel(const Transform4x4f& trans)
         Vector2f textSize = text->getFont()->sizeText(text->getText());
         
         // Update selector size to match text
-        mCarousel.selectorImage->setSize(textSize.x() + 20, // Add some padding
-                                       mCarousel.logoSize.y() * mCarousel.logoScale);
+        mCarousel.selectorImage->setSize(textSize.x(), mCarousel.logoSize.y() * mCarousel.logoScale);
     }
 	
 	// selector image
@@ -1437,6 +1459,10 @@ void SystemView::getCarouselFromTheme(const ThemeData::ThemeElement* elem)
 		Vector2f cornerSize = elem->get<Vector2f>("selectorCornerSize");
 		mCarousel.selectorImage->setCornerSize(cornerSize.x(), cornerSize.y());
 	}
+	if (elem->has("textCase"))
+    {
+        mCarousel.textCase = elem->get<std::string>("textCase");
+    }
 }
 
 void SystemView::onShow()
