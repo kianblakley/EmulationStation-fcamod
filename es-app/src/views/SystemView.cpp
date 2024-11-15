@@ -229,9 +229,9 @@ void SystemView::populate()
 
 		if (!e.data.logo)
 		{
-			// no logo in theme; use text
+			// no logo in theme; use text, capitalize first letter
 			TextComponent* text = new TextComponent(mWindow,
-				(*it)->getFullName(),
+				[](const std::string& str) { std::string s = str; if (!s.empty()) s[0] = toupper(s[0]); return s; }((*it)->getFullName()),
 				Font::get(FONT_SIZE_LARGE),
 				0x000000FF,
 				ALIGN_CENTER);
