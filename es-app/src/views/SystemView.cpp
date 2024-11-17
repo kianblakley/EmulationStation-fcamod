@@ -248,9 +248,15 @@ void SystemView::populate()
 			{
 				if (!displayName.empty())
 				{
+					// Capitalize first letter
 					displayName[0] = toupper(displayName[0]);
+					
+					// Capitalize letter after each space
 					for (size_t i = 1; i < displayName.length(); i++)
-						displayName[i] = tolower(displayName[i]);
+					{
+						if (displayName[i - 1] == ' ')
+							displayName[i] = toupper(displayName[i]);
+					}
 				}
 			}
 			// no logo in theme; use text
