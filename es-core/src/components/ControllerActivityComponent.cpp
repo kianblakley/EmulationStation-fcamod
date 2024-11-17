@@ -385,6 +385,9 @@ void ControllerActivityComponent::applyTheme(const std::shared_ptr<ThemeData>& t
 	}
 
 	onSizeChanged();
+	
+	// Force update battery images
+	mBatteryInfo.level = -2;
 	updateBatteryInfo();
 }
 
