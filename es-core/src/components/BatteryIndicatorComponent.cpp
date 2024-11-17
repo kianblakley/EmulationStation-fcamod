@@ -28,30 +28,32 @@ void BatteryIndicatorComponent::init()
 
 	mView = ActivityView::BATTERY;
 
-	 // Only set default paths if no theme paths have been set
-    if (mIncharge.empty() && ResourceManager::getInstance()->fileExists(":/battery/incharge.svg"))
-        mIncharge = ResourceManager::getInstance()->getResourcePath(":/battery/incharge.svg");
+	if (ResourceManager::getInstance()->fileExists(":/battery/incharge.svg"))
+		mIncharge = ResourceManager::getInstance()->getResourcePath(":/battery/incharge.svg");
 
-    if (mFull.empty() && ResourceManager::getInstance()->fileExists(":/battery/full.svg"))
-        mFull = ResourceManager::getInstance()->getResourcePath(":/battery/full.svg");
+	if (ResourceManager::getInstance()->fileExists(":/battery/full.svg"))
+		mFull = ResourceManager::getInstance()->getResourcePath(":/battery/full.svg");
 
-    if (mAt75.empty() && ResourceManager::getInstance()->fileExists(":/battery/75.svg"))
-        mAt75 = ResourceManager::getInstance()->getResourcePath(":/battery/75.svg");
+	if (ResourceManager::getInstance()->fileExists(":/battery/75.svg"))
+		mAt75 = ResourceManager::getInstance()->getResourcePath(":/battery/75.svg");
 
-    if (mAt50.empty() && ResourceManager::getInstance()->fileExists(":/battery/50.svg"))
-        mAt50 = ResourceManager::getInstance()->getResourcePath(":/battery/50.svg");
+	if (ResourceManager::getInstance()->fileExists(":/battery/50.svg"))
+		mAt50 = ResourceManager::getInstance()->getResourcePath(":/battery/50.svg");
 
-    if (mAt25.empty() && ResourceManager::getInstance()->fileExists(":/battery/25.svg"))
-        mAt25 = ResourceManager::getInstance()->getResourcePath(":/battery/25.svg");
+	if (ResourceManager::getInstance()->fileExists(":/battery/25.svg"))
+		mAt25 = ResourceManager::getInstance()->getResourcePath(":/battery/25.svg");
 
-    if (mEmpty.empty() && ResourceManager::getInstance()->fileExists(":/battery/empty.svg"))
-        mEmpty = ResourceManager::getInstance()->getResourcePath(":/battery/empty.svg");
+	if (ResourceManager::getInstance()->fileExists(":/battery/empty.svg"))
+		mEmpty = ResourceManager::getInstance()->getResourcePath(":/battery/empty.svg");	
 
-    if (mNetworkImage == nullptr && ResourceManager::getInstance()->fileExists(":/network.svg"))
-    {
-        mView |= ActivityView::NETWORK;
-        mNetworkImage = TextureResource::get(ResourceManager::getInstance()->getResourcePath(":/network.svg"), false, true);
-    }
+	if (ResourceManager::getInstance()->fileExists(":/battery/empty.svg"))
+		mEmpty = ResourceManager::getInstance()->getResourcePath(":/battery/empty.svg");
+
+	if (ResourceManager::getInstance()->fileExists(":/network.svg"))
+	{
+		mView |= ActivityView::NETWORK;
+		mNetworkImage = TextureResource::get(ResourceManager::getInstance()->getResourcePath(":/network.svg"), false, true);
+	}
 
 	updateBatteryInfo();
 }

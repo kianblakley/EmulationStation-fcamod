@@ -385,6 +385,7 @@ void ControllerActivityComponent::applyTheme(const std::shared_ptr<ThemeData>& t
 	}
 
 	onSizeChanged();
+	updateBatteryInfo();
 }
 
 /*void ControllerActivityComponent::updateNetworkInfo()
