@@ -355,6 +355,21 @@ void ControllerActivityComponent::applyTheme(const std::shared_ptr<ThemeData>& t
 			mEmpty = elem->get<std::string>("empty");
 	}
 
+		if (properties & COLOR)
+	{
+		if (elem->has("color"))
+			setColorShift(elem->get<unsigned int>("color"));
+
+		if (elem->has("activityColor"))
+			setActivityColor(elem->get<unsigned int>("activityColor"));
+
+		if (elem->has("hotkeyColor"))
+			setHotkeyColor(elem->get<unsigned int>("hotkeyColor"));
+
+		if (elem->has("itemSpacing"))
+			setSpacing(elem->get<float>("itemSpacing") * Renderer::getScreenWidth());
+	}
+
 
 	if (properties & ALIGNMENT)
 	{
@@ -375,21 +390,8 @@ void ControllerActivityComponent::applyTheme(const std::shared_ptr<ThemeData>& t
 	// Force update battery images
 	mBatteryInfo.level = -2;
 	updateBatteryInfo();
-
-	if (properties & COLOR)
-	{
-		if (elem->has("color"))
-			setColorShift(elem->get<unsigned int>("color"));
-
-		if (elem->has("activityColor"))
-			setActivityColor(elem->get<unsigned int>("activityColor"));
-
-		if (elem->has("hotkeyColor"))
-			setHotkeyColor(elem->get<unsigned int>("hotkeyColor"));
-
-		if (elem->has("itemSpacing"))
-			setSpacing(elem->get<float>("itemSpacing") * Renderer::getScreenWidth());
-	}
+	unsigned int currentColor = mColorShift;
+	setColorShift(currentColor)
 
 }
 
