@@ -390,9 +390,6 @@ void ControllerActivityComponent::applyTheme(const std::shared_ptr<ThemeData>& t
 	// Force update battery images
 	mBatteryInfo.level = -2;
 	updateBatteryInfo();
-	unsigned int currentColor = mColorShift;
-	setColorShift(currentColor);
-
 }
 
 /*void ControllerActivityComponent::updateNetworkInfo()
@@ -459,7 +456,7 @@ void ControllerActivityComponent::updateBatteryInfo()
     // Reapply the color shift to the battery image
     if (mBatteryImage != nullptr)
     {
-        mBatteryImage->setColorShift(mColorShift);
+        setColorShift(mColorShift);
     }
 }
 
