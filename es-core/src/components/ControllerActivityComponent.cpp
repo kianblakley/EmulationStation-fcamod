@@ -391,7 +391,7 @@ void ControllerActivityComponent::applyTheme(const std::shared_ptr<ThemeData>& t
 	mBatteryInfo.level = -2;
 	updateBatteryInfo();
 	unsigned int currentColor = mColorShift;
-	setColorShift(currentColor)
+	setColorShift(currentColor);
 
 }
 
