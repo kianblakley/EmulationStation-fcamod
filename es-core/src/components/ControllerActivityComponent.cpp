@@ -402,59 +402,65 @@ void ControllerActivityComponent::applyTheme(const std::shared_ptr<ThemeData>& t
 
 void ControllerActivityComponent::updateBatteryInfo()
 {
-	//if (Settings::getInstance()->getString("ShowBattery").empty() || (mView & BATTERY) == 0)
+    // ...existing code...
     if (!Settings::getInstance()->getBool("ShowBatteryIndicator") || Settings::getInstance()->getString("ShowBattery").empty() || (mView & BATTERY) == 0)
-	{
-		mBatteryInfo.hasBattery = false;
-		return;
-	}
+    {
+        mBatteryInfo.hasBattery = false;
+        return;
+    }
 
-	BatteryInformation info = queryBatteryInformation(false);
+    BatteryInformation info = queryBatteryInformation(false);
 
-	if (info.hasBattery == mBatteryInfo.hasBattery && info.isCharging == mBatteryInfo.isCharging && info.level == mBatteryInfo.level)
-		return;
+    if (info.hasBattery == mBatteryInfo.hasBattery && info.isCharging == mBatteryInfo.isCharging && info.level == mBatteryInfo.level)
+        return;
 
-	if (mBatteryInfo.level != info.level)
-	{
-		mBatteryFont = nullptr;
-		mBatteryText = nullptr;
-	}
+    if (mBatteryInfo.level != info.level)
+    {
+        mBatteryFont = nullptr;
+        mBatteryText = nullptr;
+    }
 
-	if (mBatteryInfo.hasBattery != info.hasBattery || mBatteryInfo.isCharging != info.isCharging)
-	{
-		mBatteryImage = nullptr;
-		mCurrentBatteryTexture = "";
-	}
+    if (mBatteryInfo.hasBattery != info.hasBattery || mBatteryInfo.isCharging != info.isCharging)
+    {
+        mBatteryImage = nullptr;
+        mCurrentBatteryTexture = "";
+    }
 
-	mBatteryInfo = info;
+    mBatteryInfo = info;
 
-	if (mBatteryInfo.hasBattery)
-	{
-		std::string txName = mIncharge;
+    if (mBatteryInfo.hasBattery)
+    {
+        std::string txName = mIncharge;
 
-		if (mBatteryInfo.isCharging && !mIncharge.empty())
-			txName = mIncharge;
-		else if (mBatteryInfo.level > 75 && !mFull.empty())
-			txName = mFull;
-		else if (mBatteryInfo.level > 50 && !mAt75.empty())
-			txName = mAt75;
-		else if (mBatteryInfo.level > 25 && !mAt50.empty())
-			txName = mAt50;
-		else if (mBatteryInfo.level > 5 && !mAt25.empty())
-			txName = mAt25;
-		else
-			txName = mEmpty;
+        if (mBatteryInfo.isCharging && !mIncharge.empty())
+            txName = mIncharge;
+        else if (mBatteryInfo.level > 75 && !mFull.empty())
+            txName = mFull;
+        else if (mBatteryInfo.level > 50 && !mAt75.empty())
+            txName = mAt75;
+        else if (mBatteryInfo.level > 25 && !mAt50.empty())
+            txName = mAt50;
+        else if (mBatteryInfo.level > 5 && !mAt25.empty())
+            txName = mAt25;
+        else
+            txName = mEmpty;
 
-		if (mCurrentBatteryTexture != txName)
-		{
-			mCurrentBatteryTexture = txName;
+        if (mCurrentBatteryTexture != txName)
+        {
+            mCurrentBatteryTexture = txName;
 
-			if (mCurrentBatteryTexture.empty())
-				mBatteryImage = nullptr;
-			else
-				mBatteryImage = TextureResource::get(mCurrentBatteryTexture, false, true);
-		}
-	}
+            if (mCurrentBatteryTexture.empty())
+                mBatteryImage = nullptr;
+            else
+                mBatteryImage = TextureResource::get(mCurrentBatteryTexture, false, true);
+        }
+    }
+
+    // Reapply the color shift to the battery image
+    if (mBatteryImage != nullptr)
+    {
+        mBatteryImage->setColorShift(mColorShift);
+    }
 }
 
 Vector2f ControllerActivityComponent::getTextureSize(std::shared_ptr<TextureResource> texture)
