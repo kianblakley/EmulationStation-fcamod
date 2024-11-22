@@ -121,6 +121,13 @@ void BasicGameListView::populateList(const std::vector<FileData*>& files)
 	{
 		addPlaceholder();
 	}
+
+	// Ensure the selected item is in the middle of the list
+	if (mList.size() > 0)
+	{
+		int middleIndex = mList.size() / 2;
+		mList.setCursorIndex(middleIndex);
+	}
 }
 
 FileData* BasicGameListView::getCursor()
@@ -165,6 +172,13 @@ void BasicGameListView::setCursor(FileData* cursor)
 	
 		populateList(children);
 		mList.setCursor(cursor);
+	}
+
+	// Ensure the selected item is in the middle of the list
+	if (mList.size() > 0)
+	{
+		int middleIndex = mList.size() / 2;
+		mList.setCursorIndex(middleIndex);
 	}
 }
 
